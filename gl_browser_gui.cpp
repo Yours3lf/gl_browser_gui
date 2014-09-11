@@ -268,7 +268,7 @@ int main( int argc, char** argv )
   browser_instance b; 
   browser::get().create( b, screen ); //automatically navigates to google.com
   //uncomment this to see the demo ui
-  //browser::get().navigate( b, "file:///C:/dev/linuxgameengine_pty/resources/ui/ui.html" ); //user our local GUI file
+  browser::get().navigate( b, "file:///C:/dev/gl_browser_gui/resources/ui/ui.html" ); //user our local GUI file
 
   //NOTE these are important bits here
   //use callbacks like these to handle js to cpp function calls
@@ -317,9 +317,6 @@ int main( int argc, char** argv )
     std::string tmp = conv.to_bytes(str);
     std::string title = tmp.substr( 0, tmp.rfind(" ") );
     std::string mode = tmp.substr( tmp.rfind(" ")+1, std::string::npos );
-    char* mod[3];
-    memcpy(mod, mode.c_str(), 3);
-    mode = std::string((const char*)mod);
     std::vector<std::string> filenames;
 
     if( mode == "of" )
