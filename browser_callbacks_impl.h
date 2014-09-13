@@ -12,9 +12,14 @@ static std::wstring get_str( Berkelium::Script::Variant* args )
   if( args )
   {
     std::wstring str;
-    str.resize( args[0].toString().length() );
-    memcpy( ( wchar_t* )str.data(), args[0].toString().data(), (args[0].toString().length()+1) * sizeof( wchar_t ) );
-    str[args[0].toString().length()] = '\0';
+
+    if( args[0].toString().length() > 0 )
+    {
+      str.resize( args[0].toString().length() );
+      memcpy( ( wchar_t* )str.data(), args[0].toString().data(), (args[0].toString().length()+1) * sizeof( wchar_t ) );
+      str[args[0].toString().length()] = '\0';
+    }
+    
     return str;
   }
   else
