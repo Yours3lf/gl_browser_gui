@@ -21,25 +21,25 @@ void browser::select_file( std::vector<std::string>& vec, const std::string& tit
   switch( type )
   {
     case OPEN:
-      {
-        fca = GTK_FILE_CHOOSER_ACTION_OPEN;
-        break;
-      }
+    {
+               fca = GTK_FILE_CHOOSER_ACTION_OPEN;
+               break;
+    }
     case SAVE:
-      {
-        fca = GTK_FILE_CHOOSER_ACTION_SAVE;
-        break;
-      }
+    {
+               fca = GTK_FILE_CHOOSER_ACTION_SAVE;
+               break;
+    }
     case CREATE_FOLDER:
-      {
-        fca = GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER;
-        break;
-      }
+    {
+                        fca = GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER;
+                        break;
+    }
     case SELECT_FOLDER:
-      {
-        fca = GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER;
-        break;
-      }
+    {
+                        fca = GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER;
+                        break;
+    }
   }
 
   //display file dialog, load texture
@@ -127,73 +127,73 @@ void browser::select_file( std::vector<std::string>& vec, const std::string& tit
   {
     std::replace( s.begin(), s.end(), '\\', '/' );
   }
-               );
+  );
 }
 
 //TODO make this crossplatform
-void browser::onCursorUpdated( Berkelium::Window* win, 
+void browser::onCursorUpdated( Berkelium::Window* win,
                                const Berkelium::Cursor& new_cursor )
 {
   SetCursor( new_cursor.GetCursor() );
 }
 
 //broken, don't use
-/*void browser::onRunFileChooser( Berkelium::Window* win, 
-                                int mode, 
-                                Berkelium::WideString title, 
+/*void browser::onRunFileChooser( Berkelium::Window* win,
+                                int mode,
+                                Berkelium::WideString title,
                                 Berkelium::FileString defaultFile )
-{
-  std::cout << "run file chooser" << std::endl;
+                                {
+                                std::cout << "run file chooser" << std::endl;
 
-  std::vector< std::string > filenames;
-  std::wstring titlestd( title.mData, title.mLength );
-  std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> conv;
-  std::string title_normal = conv.to_bytes( titlestd );
-  switch( mode )
-  {
-    case Berkelium::FileChooserType::FileOpen:
-    {
-      select_file( filenames, title_normal != "" ? title_normal : "Open", false, fileopen_type::OPEN );
-      break;
-    }
-    case Berkelium::FileChooserType::FileOpenFolder:
-    {
-      select_file( filenames, title_normal != "" ? title_normal : "Select folder", false, fileopen_type::SELECT_FOLDER );
-      break;
-    }
-    case Berkelium::FileChooserType::FileOpenMultiple:
-    {
-      select_file( filenames, title_normal != "" ? title_normal : "Open multiple files", true, fileopen_type::OPEN );
-      break;
-    }
-    case Berkelium::FileChooserType::FileSaveAs:
-    {
-      select_file( filenames, title_normal != "" ? title_normal : "Save as", true, fileopen_type::SAVE );
-      break;
-    }
-    default:
-      break;
-  }
+                                std::vector< std::string > filenames;
+                                std::wstring titlestd( title.mData, title.mLength );
+                                std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> conv;
+                                std::string title_normal = conv.to_bytes( titlestd );
+                                switch( mode )
+                                {
+                                case Berkelium::FileChooserType::FileOpen:
+                                {
+                                select_file( filenames, title_normal != "" ? title_normal : "Open", false, fileopen_type::OPEN );
+                                break;
+                                }
+                                case Berkelium::FileChooserType::FileOpenFolder:
+                                {
+                                select_file( filenames, title_normal != "" ? title_normal : "Select folder", false, fileopen_type::SELECT_FOLDER );
+                                break;
+                                }
+                                case Berkelium::FileChooserType::FileOpenMultiple:
+                                {
+                                select_file( filenames, title_normal != "" ? title_normal : "Open multiple files", true, fileopen_type::OPEN );
+                                break;
+                                }
+                                case Berkelium::FileChooserType::FileSaveAs:
+                                {
+                                select_file( filenames, title_normal != "" ? title_normal : "Save as", true, fileopen_type::SAVE );
+                                break;
+                                }
+                                default:
+                                break;
+                                }
 
-  //TODO the api doesn't say where to save the return value...
-  //so we'll just call a js function...
-#ifdef BROWSER_USE_EXCEPTIONS
-  try
-#endif
-  {
-    browser_instance& w = *instances.at( win );
+                                //TODO the api doesn't say where to save the return value...
+                                //so we'll just call a js function...
+                                #ifdef BROWSER_USE_EXCEPTIONS
+                                try
+                                #endif
+                                {
+                                browser_instance& w = *instances.at( win );
 
-    for( auto& s : filenames )
-    {
-      std::wstringstream ss;
-      ss << L"filechooser_callback('" << conv.from_bytes(s) << L"');";
-      execute_javascript( w, ss.str() );
-    }
-  }
-#ifdef BROWSER_USE_EXCEPTIONS
-  catch(...){}
-#endif
-}*/
+                                for( auto& s : filenames )
+                                {
+                                std::wstringstream ss;
+                                ss << L"filechooser_callback('" << conv.from_bytes(s) << L"');";
+                                execute_javascript( w, ss.str() );
+                                }
+                                }
+                                #ifdef BROWSER_USE_EXCEPTIONS
+                                catch(...){}
+                                #endif
+                                }*/
 
 void browser::onCrashedWorker( Berkelium::Window* win )
 {
@@ -203,21 +203,21 @@ void browser::onCrashedWorker( Berkelium::Window* win )
 void browser::onCrashedPlugin( Berkelium::Window* win,
                                Berkelium::WideString pluginName )
 {
-  std::wcerr << L"The berkelium plugin: " << std::wstring(pluginName.mData, pluginName.mLength) << " has just crashed!" << std::endl;
+  std::wcerr << L"The berkelium plugin: " << std::wstring( pluginName.mData, pluginName.mLength ) << " has just crashed!" << std::endl;
 }
 
 void browser::onProvisionalLoadError( Berkelium::Window* win,
-                                      Berkelium::URLString url, 
-                                      int errorCode, 
+                                      Berkelium::URLString url,
+                                      int errorCode,
                                       bool isMainFrame )
 {
   if( isMainFrame )
   {
-    std::cerr << "Failed to load main frame (window): " << std::string(url.mData, url.mLength) << std::endl;
+    std::cerr << "Failed to load main frame (window): " << std::string( url.mData, url.mLength ) << std::endl;
   }
   else
   {
-    std::cerr << "Failed to load XHR or iframe: " << std::string(url.mData, url.mLength) << std::endl;
+    std::cerr << "Failed to load XHR or iframe: " << std::string( url.mData, url.mLength ) << std::endl;
   }
 
   std::cerr << "Error code: " << errorCode << std::endl;
@@ -229,28 +229,28 @@ void browser::onProvisionalLoadError( Berkelium::Window* win,
                             Berkelium::URLString referrer,
                             bool isNewWindow,
                             bool& cancelDefaultAction )
-{
-  cancelDefaultAction = false;
+                            {
+                            cancelDefaultAction = false;
 
-#ifdef BROWSER_USE_EXCEPTIONS
-  try
-#endif
-  {
-    browser_instance& w = *instances.at( win );
+                            #ifdef BROWSER_USE_EXCEPTIONS
+                            try
+                            #endif
+                            {
+                            browser_instance& w = *instances.at( win );
 
-    if( isNewWindow )
-    {
-      std::cout << "Navigation requested by: " << std::string(referrer.mData, referrer.mLength) << std::endl;
-      std::cout << "To: " << std::string(newURL.mData, newURL.mLength) << std::endl;
+                            if( isNewWindow )
+                            {
+                            std::cout << "Navigation requested by: " << std::string(referrer.mData, referrer.mLength) << std::endl;
+                            std::cout << "To: " << std::string(newURL.mData, newURL.mLength) << std::endl;
 
-      browser_instance& nw = *new browser_instance();
-      create( nw, w.screen, true ); //non-user-created window --> managed
-    }
-  }
-#ifdef BROWSER_USE_EXCEPTIONS
-  catch(...){}
-#endif
-}*/
+                            browser_instance& nw = *new browser_instance();
+                            create( nw, w.screen, true ); //non-user-created window --> managed
+                            }
+                            }
+                            #ifdef BROWSER_USE_EXCEPTIONS
+                            catch(...){}
+                            #endif
+                            }*/
 
 void browser::onCrashed( Berkelium::Window* win )
 {
@@ -277,7 +277,7 @@ void browser::navigate( browser_instance& w, const std::string& url )
 void browser::destroy( browser_instance& w )
 {
   glDeleteTextures( 1, &w.browser_texture );
-  delete [] w.scroll_buffer;
+  delete[] w.scroll_buffer;
   delete w.browser_window;
   instances.erase( w.browser_window );
 }
@@ -293,7 +293,7 @@ void browser::init( const std::wstring& berkelium_path )
 #endif
 }
 
-void browser::create( browser_instance& w, mm::uvec2 screen, bool managed )
+void browser::create( browser_instance& w, const mm::uvec2& screen, bool managed )
 {
   //set managed or not
   w.managed = managed;
@@ -337,9 +337,9 @@ void browser::create( browser_instance& w, mm::uvec2 screen, bool managed )
   navigate( w, default_page );
 }
 
-void browser::resize( browser_instance& w, mm::uvec2 screen )
+void browser::resize( browser_instance& w, const mm::uvec2& screen )
 {
-  delete [] w.scroll_buffer;
+  delete[] w.scroll_buffer;
   w.scroll_buffer = new char[screen.x * ( screen.y + 1 ) * 4];
   w.browser_window->resize( screen.x, screen.y );
   w.full_refresh = true;
@@ -352,7 +352,7 @@ void browser::shutdown()
   for( auto it = instances.begin(); it != instances.end(); )
   {
     browser_instance& w = *it->second;
-    
+
     if( w.managed )
       destroy( w );
     else
@@ -388,7 +388,7 @@ void browser::onPaint( Berkelium::Window* wini,
 #endif
   {
     browser_instance& w = *instances.at( wini );
-    
+
     glBindTexture( GL_TEXTURE_2D, w.browser_texture );
 
     if( w.full_refresh )
@@ -402,7 +402,7 @@ void browser::onPaint( Berkelium::Window* wini,
       }
       else
       {
-        glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA8, w.screen.x, w.screen.y, 0, GL_BGRA, GL_UNSIGNED_BYTE, ( void* )bitmap_in );
+        glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA8, w.screen.x, w.screen.y, 0, GL_BGRA, GL_UNSIGNED_BYTE, (void*)bitmap_in );
         w.full_refresh = false;
         return;
       }
@@ -467,19 +467,21 @@ void browser::onPaint( Berkelium::Window* wini,
     w.full_refresh = false;
   }
 #ifdef BROWSER_USE_EXCEPTIONS
-  catch(...){}
+  catch( ... )
+  {
+  }
 #endif
 }
 
 template< class c, class s >
 class berkelium_string : public Berkelium::WeakString<c>
 {
-  public:
-    berkelium_string( const s& str )
-    {
-      Berkelium::WeakString<c>::mData = str.data();
-      Berkelium::WeakString<c>::mLength = str.length();
-    }
+public:
+  berkelium_string( const s& str )
+  {
+    Berkelium::WeakString<c>::mData = str.data();
+    Berkelium::WeakString<c>::mLength = str.length();
+  }
 };
 
 void browser::set_text( const browser_instance& w ) //cpp to javascript function calling
@@ -491,7 +493,7 @@ void browser::set_text( const browser_instance& w ) //cpp to javascript function
     str = berkelium_string<wchar_t, std::wstring>( p.first );
     w.browser_window->bind( str, Berkelium::Script::Variant::bindFunction( str, false ) );
   }
-                );
+  );
 }
 
 void browser::onJavascriptCallback( Berkelium::Window* win,
@@ -508,10 +510,12 @@ void browser::onJavascriptCallback( Berkelium::Window* win,
     try
 #endif
     {
-      last_callback_window = instances.at(win);
+      last_callback_window = instances.at( win );
     }
 #ifdef BROWSER_USE_EXCEPTIONS
-    catch(...){}
+    catch( ... )
+    {
+    }
 #endif
 
     std::wstring func( func_name.data(), func_name.length() );
@@ -558,19 +562,21 @@ void browser::onLoad( Berkelium::Window* win )
   try
 #endif
   {
-  browser_instance& w = *instances.at(win);
+    browser_instance& w = *instances.at( win );
 
-  sf::Mutex mtx;
-  mtx.lock();
-  {
-    std::cout << "Browser bindings set." << std::endl;
-    set_text( w );
-    js::bindings_complete( w );
-  }
-  mtx.unlock();
+    sf::Mutex mtx;
+    mtx.lock();
+    {
+      std::cout << "Browser bindings set." << std::endl;
+      set_text( w );
+      js::bindings_complete( w );
+    }
+    mtx.unlock();
   }
 #ifdef BROWSER_USE_EXCEPTIONS
-  catch(...){}
+  catch( ... )
+  {
+  }
 #endif
 }
 

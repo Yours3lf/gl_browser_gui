@@ -56,33 +56,33 @@ namespace js
     //override window.open function, so that creating a new berkelium window actually works
     //the berkelium api is broken... :D
     //this means that opening a window calls our function (see below)
-    browser::get().execute_javascript( w, 
+    browser::get().execute_javascript( w,
     L"\
-    window.open = function (open) \
-    { \
-      return function (url, name, features) \
-      { \
-        open_window(url); \
-        return open.call ?  open.call(window, url, name, features):open( url, name, features); \
-      }; \
-    }(window.open);" );
+              window.open = function (open) \
+                           { \
+                                              return function (url, name, features) \
+                                                                       { \
+                                                                                                        open_window(url); \
+                                                                                                                                                 return open.call ?  open.call(window, url, name, features):open( url, name, features); \
+                                                                                                                                                                                                }; \
+                                                                                                                                                                                                                                                   }(window.open);" );
 
     //for manually loaded webpages (loaded from the cpp code)
     //we add an onclick function call to the <input type="file" />
     //tags, so that file selection, opening etc. works
     //see below
-    browser::get().execute_javascript( w, 
+    browser::get().execute_javascript( w,
     L"\
-    var list = document.getElementsByTagName('input'); \
-    for( var i = 0; i < list.length; ++i ) \
-    { \
-      var att = list[i].getAttribute('type'); \
-      if(att && att == 'file') \
-      { \
-        list[i].onclick = function(){ choose_file('Open file of'); }; \
-      } \
-    } \
-    " );
+              var list = document.getElementsByTagName('input'); \
+                           for( var i = 0; i < list.length; ++i ) \
+                                            { \
+                                                                   var att = list[i].getAttribute('type'); \
+                                                                                                if(att && att == 'file') \
+                                                                                                                                   { \
+                                                                                                                                                                              list[i].onclick = function(){ choose_file('Open file of'); }; \
+                                                                                                                                                                                                                               } \
+                                                                                                                                                                                                                                                                                    } \
+                                                                                                                                                                                                                                                                                                                                             " );
 
     std::wstringstream ws;
     ws << "bindings_complete();";
@@ -101,16 +101,16 @@ namespace js
 }
 
 //NOTE broken, don't use
-/*void browser::onResizeRequested( Berkelium::Window* win, 
-                        int x, 
-                        int y, 
-                        int newWidth, 
+/*void browser::onResizeRequested( Berkelium::Window* win,
+                        int x,
+                        int y,
+                        int newWidth,
                         int newHeight )
-{
-  std::cout << "resize requested" << std::endl;
+                        {
+                        std::cout << "resize requested" << std::endl;
 
-  frm.resize( x, y, newWidth, newHeight );
-}*/
+                        frm.resize( x, y, newWidth, newHeight );
+                        }*/
 
 //NOTE you can do whatever with the page title, I decided to print in to the top of the window
 void browser::onTitleChanged( Berkelium::Window* win,
@@ -118,7 +118,7 @@ void browser::onTitleChanged( Berkelium::Window* win,
 {
   std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> conv;
   std::wstring str( title.mData, title.mLength );
-  the_window.setTitle( conv.to_bytes(str) );
+  the_window.setTitle( conv.to_bytes( str ) );
 }
 
 int main( int argc, char** argv )
@@ -169,7 +169,9 @@ int main( int argc, char** argv )
     args.at( "--fullscreen" );
     fullscreen = true;
   }
-  catch( ... ) {}
+  catch( ... )
+  {
+  }
 
   try
   {
@@ -182,20 +184,24 @@ int main( int argc, char** argv )
          "       --help        //display this information" << endl;
     return 0;
   }
-  catch( ... ) {}
+  catch( ... )
+  {
+  }
 
   try
   {
     args.at( "--silent" );
     silent = true;
   }
-  catch( ... ) {}
+  catch( ... )
+  {
+  }
 
   /*
    * Initialize the OpenGL context
    */
 
-  the_window.create( sf::VideoMode( screen.x > 0 ? screen.x : 1280, screen.y > 0 ? screen.y : 720, 32 ), title, fullscreen ? sf::Style::Fullscreen : sf::Style::Default );	  
+  the_window.create( sf::VideoMode( screen.x > 0 ? screen.x : 1280, screen.y > 0 ? screen.y : 720, 32 ), title, fullscreen ? sf::Style::Fullscreen : sf::Style::Default );
 
   if( !the_window.isOpen() )
   {
@@ -226,7 +232,7 @@ int main( int argc, char** argv )
   {
     cerr << "Error: " << STRINGIFY( GLEW_VERSION_4_3 ) << " is required" << endl;
     the_window.close();
-    exit(0);
+    exit( 0 );
   }
 
   glEnable( GL_DEBUG_OUTPUT );
@@ -249,7 +255,7 @@ int main( int argc, char** argv )
    * Set up the scene
    */
 
-  GLuint ss_quad = create_quad( vec3(-1, -1, 0), vec3(1, -1, 0), vec3(-1, 1, 0), vec3(1, 1, 0) );
+  GLuint ss_quad = create_quad( vec3( -1, -1, 0 ), vec3( 1, -1, 0 ), vec3( -1, 1, 0 ), vec3( 1, 1, 0 ) );
 
   /*
    * Set up the browser
@@ -265,7 +271,7 @@ int main( int argc, char** argv )
   //like, display a youtube video
   //run a webgl game on one of the walls etc.
   //you get a texture, and you can render it whereever or however you'd like to
-  browser_instance b; 
+  browser_instance b;
   browser::get().create( b, screen ); //automatically navigates to google.com
   //uncomment this to see the demo ui
   browser::get().navigate( b, "file:///C:/dev/gl_browser_gui/resources/ui/ui.html" ); //user our local GUI file
@@ -303,8 +309,8 @@ int main( int argc, char** argv )
     ivec2 pos = ivec2( the_window.getPosition().x, the_window.getPosition().y );
     std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> conv;
     int w, h;
-    std::string tmp = conv.to_bytes(str);
-    sscanf(tmp.c_str(), "%d %d", &w, &h);
+    std::string tmp = conv.to_bytes( str );
+    sscanf( tmp.c_str(), "%d %d", &w, &h );
     the_window.setPosition( sf::Vector2<int>( pos.x, pos.y ) );
     the_window.setSize( sf::Vector2<unsigned>( w, h ) );
   }, std::wstring() ) );
@@ -314,29 +320,29 @@ int main( int argc, char** argv )
   browser::get().register_callback( L"choose_file", fun( [=]( std::wstring str )
   {
     std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> conv;
-    std::string tmp = conv.to_bytes(str);
-    std::string title = tmp.substr( 0, tmp.rfind(" ") );
-    std::string mode = tmp.substr( tmp.rfind(" ")+1, std::string::npos );
+    std::string tmp = conv.to_bytes( str );
+    std::string title = tmp.substr( 0, tmp.rfind( " " ) );
+    std::string mode = tmp.substr( tmp.rfind( " " ) + 1, std::string::npos );
     std::vector<std::string> filenames;
 
     if( mode == "of" )
-      browser::get().select_file(filenames, title != "" ? title : "Open file", false, fileopen_type::OPEN);
+      browser::get().select_file( filenames, title != "" ? title : "Open file", false, fileopen_type::OPEN );
 
     if( mode == "sf" )
-      browser::get().select_file(filenames, title != "" ? title : "Select folder", false, fileopen_type::SELECT_FOLDER);
+      browser::get().select_file( filenames, title != "" ? title : "Select folder", false, fileopen_type::SELECT_FOLDER );
 
     if( mode == "om" )
-      browser::get().select_file(filenames, title != "" ? title : "Open multiple file", true, fileopen_type::OPEN);
+      browser::get().select_file( filenames, title != "" ? title : "Open multiple file", true, fileopen_type::OPEN );
 
     if( mode == "sa" )
-      browser::get().select_file(filenames, title != "" ? title : "Save as", true, fileopen_type::SAVE);
-    
+      browser::get().select_file( filenames, title != "" ? title : "Save as", true, fileopen_type::SAVE );
+
     //TODO the api doesn't say where to save the return value...
     //so we'll just call a js function...
     for( auto& s : filenames )
     {
       std::wstringstream ss;
-      ss << L"filechooser_callback('" << conv.from_bytes(s) << L"');";
+      ss << L"filechooser_callback('" << conv.from_bytes( s ) << L"');";
       browser::get().execute_javascript( browser::get().get_last_callback_window(), ss.str() );
     }
   }, std::wstring() ) );
@@ -363,62 +369,62 @@ int main( int argc, char** argv )
     {
       case sf::Event::MouseMoved:
       {
-        vec2 mpos( ev.mouseMove.x / float( screen.x ), ev.mouseMove.y / float( screen.y ) );
+                                  vec2 mpos( ev.mouseMove.x / float( screen.x ), ev.mouseMove.y / float( screen.y ) );
 
-        browser::get().mouse_moved( b, mpos );
+                                  browser::get().mouse_moved( b, mpos );
 
-        break;
+                                  break;
       }
       case sf::Event::TextEntered:
       {
-        wchar_t txt[2];
-        txt[0] = ev.text.unicode;
-        txt[1] = '\0';
-        browser::get().text_entered( b, txt );
+                                   wchar_t txt[2];
+                                   txt[0] = ev.text.unicode;
+                                   txt[1] = '\0';
+                                   browser::get().text_entered( b, txt );
 
-        break;
+                                   break;
       }
       case sf::Event::MouseButtonPressed:
       {
-        if( ev.mouseButton.button == sf::Mouse::Left )
-        {
-          browser::get().mouse_button_event( b, sf::Mouse::Left, true );
-        }
-        else
-        {
-          browser::get().mouse_button_event( b, sf::Mouse::Right, true );
-        }
+                                          if( ev.mouseButton.button == sf::Mouse::Left )
+                                          {
+                                            browser::get().mouse_button_event( b, sf::Mouse::Left, true );
+                                          }
+                                          else
+                                          {
+                                            browser::get().mouse_button_event( b, sf::Mouse::Right, true );
+                                          }
 
-        break;
+                                          break;
       }
       case sf::Event::MouseButtonReleased:
       {
-        if( ev.mouseButton.button == sf::Mouse::Left )
-        {
-          browser::get().mouse_button_event( b, sf::Mouse::Left, false );
-        }
-        else
-        {
-          browser::get().mouse_button_event( b, sf::Mouse::Right, false );
-        }
+                                           if( ev.mouseButton.button == sf::Mouse::Left )
+                                           {
+                                             browser::get().mouse_button_event( b, sf::Mouse::Left, false );
+                                           }
+                                           else
+                                           {
+                                             browser::get().mouse_button_event( b, sf::Mouse::Right, false );
+                                           }
 
-        break;
+                                           break;
       }
       case sf::Event::MouseWheelMoved:
       {
-        browser::get().mouse_wheel_moved( b, ev.mouseWheel.delta * 100.0f );
+                                       browser::get().mouse_wheel_moved( b, ev.mouseWheel.delta * 100.0f );
 
-        break;
+                                       break;
       }
       case sf::Event::Resized:
       {
-        screen = uvec2( ev.size.width, ev.size.height );
+                               screen = uvec2( ev.size.width, ev.size.height );
 
-        glViewport( 0, 0, screen.x, screen.y );
+                               glViewport( 0, 0, screen.x, screen.y );
 
-        browser::get().resize( b, screen );
+                               browser::get().resize( b, screen );
 
-        break;
+                               break;
       }
       default:
         break;
@@ -456,7 +462,7 @@ int main( int argc, char** argv )
 
     glActiveTexture( GL_TEXTURE0 );
     glBindTexture( GL_TEXTURE_2D, b.browser_texture );
-    
+
     glBindVertexArray( ss_quad );
     glDrawElements( GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0 );
 
@@ -551,11 +557,15 @@ void link_shader( const GLuint& shader_program )
 
 GLuint create_quad( const vec3& ll, const vec3& lr, const vec3& ul, const vec3& ur )
 {
-  vector<vec3> vertices;
-  vector<vec2> tex_coords;
-  vector<unsigned int> indices;
+  vector<float> vertices;
+  vector<float> tex_coords;
+  vector<unsigned> indices;
   GLuint vao = 0;
   GLuint vertex_vbo = 0, tex_coord_vbo = 0, index_vbo = 0;
+
+  vertices.reserve( 4 * 3 );
+  tex_coords.reserve( 4 * 2 );
+  indices.reserve( 2 * 3 );
 
   indices.push_back( 0 );
   indices.push_back( 1 );
@@ -569,34 +579,52 @@ GLuint create_quad( const vec3& ll, const vec3& lr, const vec3& ul, const vec3& 
   vertices.push_back( vec3( 1, -1, 0 ) );
   vertices.push_back( vec3( 1, 1, 0 ) );
   vertices.push_back( vec3( -1, 1, 0 ) );*/
-  vertices.push_back( ll );
-  vertices.push_back( lr );
-  vertices.push_back( ur );
-  vertices.push_back( ul );
+  vertices.push_back( ll.x );
+  vertices.push_back( ll.y );
+  vertices.push_back( ll.z );
 
-  tex_coords.push_back( vec2( 0, 0 ) );
-  tex_coords.push_back( vec2( 1, 0 ) );
-  tex_coords.push_back( vec2( 1, 1 ) );
-  tex_coords.push_back( vec2( 0, 1 ) );
+  vertices.push_back( lr.x );
+  vertices.push_back( lr.y );
+  vertices.push_back( lr.z );
+
+  vertices.push_back( ur.x );
+  vertices.push_back( ur.y );
+  vertices.push_back( ur.z );
+
+  vertices.push_back( ul.x );
+  vertices.push_back( ul.y );
+  vertices.push_back( ul.z );
+
+  tex_coords.push_back( 0 );
+  tex_coords.push_back( 0 );
+
+  tex_coords.push_back( 1 );
+  tex_coords.push_back( 0 );
+
+  tex_coords.push_back( 1 );
+  tex_coords.push_back( 1 );
+
+  tex_coords.push_back( 0 );
+  tex_coords.push_back( 1 );
 
   glGenVertexArrays( 1, &vao );
   glBindVertexArray( vao );
 
   glGenBuffers( 1, &vertex_vbo );
   glBindBuffer( GL_ARRAY_BUFFER, vertex_vbo );
-  glBufferData( GL_ARRAY_BUFFER, sizeof( float ) * vertices.size() * 3, &vertices[0][0], GL_STATIC_DRAW );
+  glBufferData( GL_ARRAY_BUFFER, sizeof(float)* vertices.size(), &vertices[0], GL_STATIC_DRAW );
   glEnableVertexAttribArray( 0 );
   glVertexAttribPointer( 0, 3, GL_FLOAT, 0, 0, 0 );
 
   glGenBuffers( 1, &tex_coord_vbo );
   glBindBuffer( GL_ARRAY_BUFFER, tex_coord_vbo );
-  glBufferData( GL_ARRAY_BUFFER, sizeof( float ) * tex_coords.size() * 2, &tex_coords[0][0], GL_STATIC_DRAW );
+  glBufferData( GL_ARRAY_BUFFER, sizeof(float)* tex_coords.size(), &tex_coords[0], GL_STATIC_DRAW );
   glEnableVertexAttribArray( 1 );
   glVertexAttribPointer( 1, 2, GL_FLOAT, 0, 0, 0 );
 
   glGenBuffers( 1, &index_vbo );
   glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, index_vbo );
-  glBufferData( GL_ELEMENT_ARRAY_BUFFER, sizeof( unsigned int ) * indices.size(), &indices[0], GL_STATIC_DRAW );
+  glBufferData( GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int)* indices.size(), &indices[0], GL_STATIC_DRAW );
 
   glBindVertexArray( 0 );
 
